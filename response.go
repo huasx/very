@@ -1,4 +1,5 @@
 package very
+
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/render"
@@ -12,9 +13,14 @@ type JSONResponse struct {
 	HttpStatus int          `json:"-"`
 	Context    *gin.Context `json:"-"`
 	Data       interface{}  `json:"data"`
+	isRendered bool
 }
 
 func (c *JSONResponse) Render() {
+	if c.isRendered == true {
+		return
+	}
+	c.isRendered = true
 	c.Context.Render(c.HttpStatus, JSON{render.JSON{Data: c.Data}})
 }
 
